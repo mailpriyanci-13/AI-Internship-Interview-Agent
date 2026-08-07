@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "AI Internship & Interview Agent",
+  "version": "1.0",
+  "description": "Advanced Local LLM Career Architecture",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:11434/*"
+  ]
+}

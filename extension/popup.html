@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Workspace</title>
+    <style>
+      :root {
+        --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --card-border: rgba(255, 255, 255, 0.12);
+        --card-hover-border: rgba(99, 102, 241, 0.5);
+        --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        --primary-hover: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+      }
+
+      body {
+        width: 380px;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: var(--bg-gradient);
+        color: var(--text-main);
+        box-sizing: border-box;
+        overflow-x: hidden;
+      }
+
+      .screen {
+        display: none;
+        padding: 24px 20px;
+        box-sizing: border-box;
+        min-height: 500px;
+      }
+      .screen.active {
+        display: flex;
+        flex-direction: column;
+      }
+
+      #screen-main.active {
+        align-items: center;
+      }
+
+      .app-header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        color: #818cf8;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+      .app-header h1 {
+        font-size: 20px;
+        font-weight: 800;
+        margin: 0 0 6px 0;
+        background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+      }
+      .app-header p {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin: 0;
+        line-height: 1.4;
+      }
+
+      .action-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .action-btn {
+        position: relative;
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        padding: 14px 16px;
+        color: var(--text-main);
+        cursor: pointer;
+        text-align: left;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .action-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--card-hover-border);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+      }
+      .action-btn.primary {
+        background: var(--primary-gradient);
+        border: none;
+        box-shadow: 0 4px 15px rgba(168, 85, 247, 0.35);
+      }
+      .action-btn.primary:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+      }
+      .action-btn .btn-icon {
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        flex-shrink: 0;
+      }
+      .action-btn.primary .btn-icon {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .btn-text-container {
+        display: flex;
+        flex-direction: column;
+      }
+      .btn-title {
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: -0.2px;
+      }
+      .btn-desc {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 2px;
+      }
+      .action-btn.primary .btn-desc {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      h2 { font-size: 18px; margin-top: 0; }
+      .radio-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+      .radio-group label { background: var(--card-bg); padding: 10px; border-radius: 8px; border: 1px solid var(--card-border); cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+      .radio-group label:hover { background: rgba(255,255,255,0.1); }
+      .input-group { margin-bottom: 12px; }
+      .input-group label { display: block; font-size: 11px; margin-bottom: 4px; color: var(--text-muted); }
+      .input-group input[type="text"] { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--card-border); background: rgba(0,0,0,0.2); color: white; box-sizing: border-box; }
+      .input-group input[type="file"] { font-size: 11px; }
+      
+      .btn-std { 
+        background: var(--primary-gradient); 
+        color: white; 
+        border: none; 
+        padding: 10px 15px; 
+        border-radius: 8px; 
+        cursor: pointer; 
+        font-weight: bold; 
+        margin-top: 10px;
+        width: 100%;
+      }
+      .btn-std:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; }
+      .btn-back { 
+        background: transparent; 
+        color: var(--text-muted); 
+        border: 1px solid var(--card-border); 
+        padding: 8px; 
+        border-radius: 8px; 
+        cursor: pointer; 
+        margin-top: 10px;
+        width: 100%;
+      }
+      
+      #screen-dashboard {
+        background: #f8fafc; 
+        color: #0f172a;
+        min-height: 600px;
+        padding: 15px;
+      }
+      #screen-dashboard h2 { color: #0f172a; font-size: 16px; margin-bottom: 15px; text-align: center; }
+      #btn-exit { background: #e2e8f0; color: #475569; border: none; padding: 10px; width: 100%; border-radius: 8px; margin-top: 15px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="screen-main" class="screen active">
+      <div class="app-header">
+        <span class="badge">⚡ Local LLM Architecture</span>
+        <h1>AI Internship & Interview Agent </h1>
+        <p>Smart Assistant for Internships, Interviews &amp; Skill Building</p>
+      </div>
+
+      <div class="action-container">
+        <button type="button" id="btn-create" class="action-btn primary">
+          <div class="btn-icon">🚀</div>
+          <div class="btn-text-container">
+            <span class="btn-title">Start New Track</span>
+            <span class="btn-desc">Setup Internship, Interview or Skills</span>
+          </div>
+        </button>
+
+        <button type="button" id="btn-continue" class="action-btn">
+          <div class="btn-icon">⚡</div>
+          <div class="btn-text-container">
+            <span class="btn-title">Continue Workspace</span>
+            <span class="btn-desc">Resume your previous session</span>
+          </div>
+        </button>
+
+        <button type="button" id="btn-memory" class="action-btn">
+          <div class="btn-icon">🧠</div>
+          <div class="btn-text-container">
+            <span class="btn-title">Agent Memory Vault</span>
+            <span class="btn-desc">View stored context &amp; execution logs</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div id="screen-prep" class="screen">
+        <h2>Select Track</h2>
+        <div class="radio-group">
+            <label><input type="radio" name="prepType" value="internship" /> Internship Preparation</label>
+            <label><input type="radio" name="prepType" value="interview" /> Interview Preparation</label>
+            <label><input type="radio" name="prepType" value="skills" /> Skill Development</label>
+        </div>
+        <button type="button" id="btn-prep-next" class="btn-std" disabled>Next Step</button>
+        <button type="button" id="back-to-main" class="btn-back">Back to Main</button>
+    </div>
+
+    <div id="screen-form" class="screen">
+        <h2 id="form-title">Enter Details</h2>
+        <div id="dynamic-inputs"></div>
+        
+        <div class="input-group" style="margin-top: 15px;">
+            <label>Upload Resume/Profile (Optional context)</label>
+            <input type="file" id="resume-upload" accept=".pdf,.doc,.docx,.txt" />
+        </div>
+
+        <button type="button" id="btn-analyze" class="btn-std" disabled>Initialize Workspace</button>
+        <button type="button" id="back-to-prep" class="btn-back">Back</button>
+    </div>
+
+    <div id="screen-loading" class="screen">
+        <div style="text-align: center; margin-top: 50px;">
+            <div style="font-size: 40px; margin-bottom: 15px;">⚙️</div>
+            <h3 style="margin: 0; color: white;">Compiling Architecture...</h3>
+            <p style="color: var(--text-muted); font-size: 12px; margin-top: 8px;">Processing local LLM models.</p>
+        </div>
+    </div>
+
+    <div id="screen-dashboard" class="screen">
+        <h2 id="dash-title">Workspace Hub</h2>
+        <div id="dash-content"></div>
+        <button type="button" id="btn-exit">Exit to Main Menu</button>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
